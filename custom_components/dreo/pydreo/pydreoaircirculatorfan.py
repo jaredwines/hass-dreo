@@ -20,19 +20,12 @@ class PyDreoAirCirculatorFan(PyDreoFan):
         """Initialize air devices."""
         super().__init__(fan_definition, details, dreoManager)
         self._fan_definition = fan_definition
-        self._wind_mode = None
         self._horizontally_oscillating = None
         self._vertically_oscillating = None
 
     def handle_server_update(self, message: dict):
         """Handle an incoming WebSocket message."""
         super().handle_server_update(message)
-
-        valWindMode = self.get_server_update_key_value(
-            message, AIR_CIRCULATOR_WIND_MODE_KEY
-        )
-        if isinstance(valWindMode, int):
-            self._wind_mode = valWindMode
 
         valHorizontalOscillation = self.get_server_update_key_value(message, HORIZONTAL_OSCILLATION_KEY)
         if isinstance(valHorizontalOscillation, bool):
@@ -77,7 +70,6 @@ class PyDreoAirCirculatorFan(PyDreoFan):
         _LOGGER.debug("PyDreoAirCirculatorFan:update_state")
         super().update_state(state)
 
-        self._wind_mode = self.get_state_update_value(state, AIR_CIRCULATOR_WIND_MODE_KEY)
         self._horizontally_oscillating = self.get_state_update_value(state, HORIZONTAL_OSCILLATION_KEY)
         self._vertically_oscillating = self.get_state_update_value(state, VERTICAL_OSCILLATION_KEY)
 

@@ -32,14 +32,6 @@ class PyDreoFan(PyDreoBaseDevice):
         if isinstance(valPoweron, bool):
             self._is_on = valPoweron
 
-        valWindLevel = self.get_server_update_key_value(message, WINDLEVEL_KEY)
-        if isinstance(valWindLevel, int):
-            self._fan_speed = valWindLevel
-
-        valTemperature = self.get_server_update_key_value(message, TEMPERATURE_KEY)
-        if isinstance(valTemperature, int):
-            self._temperature = valTemperature
-
     @property
     def speed_range(self):
         return self._fan_definition.speed_range
@@ -56,10 +48,6 @@ class PyDreoFan(PyDreoBaseDevice):
 
 
     @property
-    def temperature(self):
-        return self._temperature
-    
-    @property
     def supports_oscillation(self):
         pass
 
@@ -67,13 +55,6 @@ class PyDreoFan(PyDreoBaseDevice):
     def oscillating(self):
         pass
     
-    def update_state(self, state: dict) :
-        """Process the state dictionary from the REST API."""
-        _LOGGER.debug("PyDreoFan:update_state")
-        super().update_state(state)
-        self._fan_speed = self.get_state_update_value(state, WINDLEVEL_KEY)
-        self._temperature = self.get_state_update_value(state, TEMPERATURE_KEY)
-
     def set_power(self, value: bool):
         _LOGGER.debug("PyDreoFan:set_power")
         self._send_command(POWERON_KEY, value)
