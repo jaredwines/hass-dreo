@@ -95,7 +95,7 @@ SUPPORTED_FANS = {
                                        speed_range=(1,9),
                                        oscillation_support= OscillationSupport.HORIZONTAL),
 
-    "DR-HTF008S" : PyDreoFanDefinition(preset_modes=[FAN_MODE_NORMAL, FAN_MODE_NATURAL, FAN_MODE_SLEEP, FAN_MODE_AUTO],
+    "DR-HTF008S" : PyDreoFanDefinition(preset_modes=[],
                                        speed_range=(1,5),
                                        oscillation_support= OscillationSupport.HORIZONTAL),
 }
