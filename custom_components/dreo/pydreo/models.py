@@ -43,6 +43,6 @@ SUPPORTED_AIR_CIRCULATOR_FANS = {
         speed_range=(1, 8)
     ),
     "DR-HAF004S": DreoFanDetails(
-]        speed_range=(1, 9)
+        speed_range=(1, 9)
     ),
 }
