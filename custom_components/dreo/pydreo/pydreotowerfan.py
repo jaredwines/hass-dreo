@@ -38,23 +38,10 @@ class PyDreoTowerFan(PyDreoFan):
         """Handle messages from the WebSocket connection."""
         super().handle_server_update(message)
 
-        valWindType = self.get_server_update_key_value(message, WINDTYPE_KEY)
-        if isinstance(valWindType, int):
-            self._windType = valWindType
-
         valShakeHorizon = self.get_server_update_key_value(message, SHAKEHORIZON_KEY)
         if (isinstance(valShakeHorizon, bool)):
             self._oscillating = valShakeHorizon
     
-    @property
-    def supports_preset_modes(self):
-        return self._windType is not None
-
-    @property
-    def preset_mode(self):
-        """Return the current preset mode."""
-        return self.preset_modes[self._windType - 1]
-
     @property
     def supports_oscillation(self) -> bool:
         """Does the fan support oscillation?"""
@@ -69,15 +56,7 @@ class PyDreoTowerFan(PyDreoFan):
         """Process the state dictionary from the REST API."""
         _LOGGER.debug("PyDreoTowerFan:update_state")
         super().update_state(state)
-        self._windType = self.get_state_update_value(state, WINDTYPE_KEY)
         self._oscillating = self.get_state_update_value(state, SHAKEHORIZON_KEY)
-
-    def set_preset_mode(self, preset_mode: str):
-        _LOGGER.debug("PyDreoTowerFan:set_preset_mode")        
-        if (preset_mode in self.preset_modes):
-            self._send_command(WINDTYPE_KEY, self._fan_definition.preset_modes.index(preset_mode) + 1)
-        else:
-            _LOGGER.error("Preset mode %s is not in the acceptable list: %s", preset_mode, self._fan_definition.preset_modes)
 
     def oscillate(self, oscillating: bool) -> None:
         """Enable or disable oscillation"""

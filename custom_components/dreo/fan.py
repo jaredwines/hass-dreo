@@ -73,43 +73,9 @@ class DreoFanHA(DreoBaseDeviceHA, FanEntity):
         """Return the number of speeds the fan supports."""
         return int_states_in_range(self.device.speed_range)
 
-    @property
-    def preset_modes(self) -> list[str]:
-        """Get the list of available preset modes."""
-        return self.device.preset_modes
-
-    @property
-    def preset_mode(self) -> str | None:
-        """Get the current preset mode."""
-        if (self.device.supports_preset_modes):
-            return self.device.preset_mode
-        else:
-            return None
-
-    @property
-    def extra_state_attributes(self) -> dict[str, Any]:
-        """Return the state attributes of the fan."""
-        attr = {"temperature": self.device.temperature,
-            'model': self.device.model,
-            'sn': self.device.sn}
-        return attr
-
-    @property
-    def supported_features(self) -> int:
-        """Return the list of supported features."""
-        supported_features = FanEntityFeature.SET_SPEED 
-        
-        if (self.device.supports_preset_modes):
-            supported_features = supported_features | FanEntityFeature.PRESET_MODE
-        if (self.device.supports_oscillation):
-            supported_features = supported_features | FanEntityFeature.OSCILLATE
-
-        return supported_features
-
     def turn_on(
         self,
         percentage: int | None = None,
-        preset_mode: str | None = None,
         **kwargs: Any,
     ) -> None:
         """Turn the device on."""
@@ -133,21 +99,6 @@ class DreoFanHA(DreoBaseDeviceHA, FanEntity):
         self.device.change_fan_speed(
             math.ceil(percentage_to_ranged_value(self.device.speed_range, percentage))
         )
-        self.schedule_update_ha_state()
-
-    def set_preset_mode(self, preset_mode: str) -> None:
-        """Set the preset mode of device."""
-        if preset_mode not in self.preset_modes:
-            raise ValueError(
-                f"{preset_mode} is not one of the valid preset modes: "
-                f"{self.preset_modes}"
-            )
-
-        if not self.device.is_on:
-            self.device.set_power(True)
-
-        self.device.set_preset_mode(preset_mode)
-
         self.schedule_update_ha_state()
 
     def oscillate(self, oscillating: bool) -> None:

@@ -47,13 +47,6 @@ class PyDreoAirCirculatorFan(PyDreoFan):
         """Returns `True` if the device is on, `False` otherwise."""
         return self._is_on
 
-    @property
-    def supports_preset_modes(self):
-        return self._wind_mode is not None
-    
-    @property
-    def preset_mode(self):
-        return self._fan_definition.preset_modes[self._wind_mode - 1]
 
     @property
     def oscillating(self):
@@ -75,13 +68,6 @@ class PyDreoAirCirculatorFan(PyDreoFan):
     @property
     def supports_vertical_oscillation(self) -> bool:
         return self._vertically_oscillating is not None
-
-    def set_preset_mode(self, preset_mode: str):
-        _LOGGER.debug("PyDreoAirCirculatorFan:set_preset_mode")        
-        if (preset_mode in self.preset_modes):
-            self._send_command(AIR_CIRCULATOR_WIND_MODE_KEY, self._fan_definition.preset_modes.index(preset_mode) + 1)
-        else:
-            _LOGGER.error("Preset mode %s is not in the acceptable list: %s", preset_mode, self._fan_definition.preset_modes)
 
     def oscillate_horizontally(self, oscillating: bool) -> None:
         _LOGGER.debug("PyDreoAirCirculatorFan:oscillate_horizontally")

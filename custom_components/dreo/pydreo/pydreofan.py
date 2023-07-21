@@ -44,9 +44,6 @@ class PyDreoFan(PyDreoBaseDevice):
     def speed_range(self):
         return self._fan_definition.speed_range
 
-    @property
-    def preset_modes(self):
-        return self._fan_definition.preset_modes
             
     @property
     def is_on(self):
@@ -57,17 +54,10 @@ class PyDreoFan(PyDreoBaseDevice):
     def fan_speed(self):
         return self._fan_speed
 
-    @property
-    def preset_mode(self):
-        pass
 
     @property
     def temperature(self):
         return self._temperature
-
-    @property 
-    def supports_preset_modes(self):
-        pass
     
     @property
     def supports_oscillation(self):
